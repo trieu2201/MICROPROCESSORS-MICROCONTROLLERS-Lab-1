@@ -95,17 +95,28 @@ int main(void)
   {
     /* USER CODE END WHILE */
 	  for(int i = 9; i >= 0; i--) {
-		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7, 1);
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 | GPIO_PIN_5 | GPIO_PIN_6 | GPIO_PIN_7 | GPIO_PIN_8 | GPIO_PIN_9, 0);
 		  if(i >= 5) {
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0); //R
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, 1); // RV
 		  }
 		  else if(i >= 2 && i < 5) {
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 0); //G
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 1); // GV
 		  }
 		  else {
-			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, 0); //Y
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1); // YV
 		  }
-		  HAL_Delay(250);
+
+		  if(i >= 7) {
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, 1); // GH
+		  }
+		  else if(i >= 5 && i < 7) {
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, 1); // YH
+		  }
+		  else {
+			  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, 1); // RH
+		  }
+
+		  HAL_Delay(2000);
 	  }
     /* USER CODE BEGIN 3 */
   }
@@ -160,10 +171,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
+                          |GPIO_PIN_8|GPIO_PIN_9, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PA5 PA6 PA7 */
-  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7;
+  /*Configure GPIO pins : PA4 PA5 PA6 PA7
+                           PA8 PA9 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_7
+                          |GPIO_PIN_8|GPIO_PIN_9;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
