@@ -42,13 +42,20 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+int matrix[7][5] = {0};
+int led[12][2] = {{1,2}, {1,3}, {2,4}, {3,4}, {4,4}, {5,3}, {5,2}, {5,1}, {4,0}, {3,0}, {2,0}, {1,1}};
+uint16_t col5[] = {GPIO_PIN_4, GPIO_PIN_5, GPIO_PIN_6, GPIO_PIN_7, GPIO_PIN_8};
+uint16_t row7[] = {GPIO_PIN_9, GPIO_PIN_10, GPIO_PIN_11, GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 /* USER CODE BEGIN PFP */
+void clearAllClock();
+void setNumberClock(int);
+void clearNumberClock(int);
+void setClock();
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -90,15 +97,12 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  clearAllClock();
   while (1)
   {
     /* USER CODE END WHILE */
-	  HAL_GPIO_WritePin(GPIOA, 0xffff, 0);
-	  for(int i = 0; i < 12; i++) {
-		  HAL_Delay(250);
-		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 << i, 1);
-	  }
-	  HAL_Delay(255);
+	  setClock();
+	  HAL_Delay(250);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
@@ -170,7 +174,32 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void clearAllClock() {
+	HAL_GPIO_WritePin(GPIOA, 0xffff, 0);
+}
+void setNumberClock(int num) {
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 << num, 1);
+}
+void clearNumberClock(int num) {
+	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4 << num, 0);
+}
+void setClock() {
+	static int second = 11;
+	static int minute = 11;
+	static int hour = 11;
 
+	second = (second==11)? 0:second+1;
+	if(second == 0) {
+		minute = (minute==11)? 0:minute+1;
+		if(minute == 0) {
+			hour = (hour==11)? 0:hour+1;
+		}
+	}
+	clearAllClock();
+	setNumberClock(second);
+	setNumberClock(minute);
+	setNumberClock(hour);
+}
 /* USER CODE END 4 */
 
 /**
